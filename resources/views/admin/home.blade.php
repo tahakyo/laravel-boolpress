@@ -1,4 +1,4 @@
-@extends('layouts.dashbord')
+@extends('layouts.dashboard')
 
 @section('content')
     <h1>Hello {{ $user->name }} welcome to</h1>
