@@ -103,7 +103,10 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return redirect()->route('admin.posts.index');
     }
     private function getPostSlugFromTitle ($title) {
         //generiamo slug base
