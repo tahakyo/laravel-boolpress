@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -45,7 +44,7 @@ class PostController extends Controller
         $post->fill($data);
 
         
-        $post->slug = $this->getPostSlugFromTitle($post->title);
+        $post->slug = Post::getPostSlugFromTitle($post->title);
         $post->save();
 
         return redirect()->route('admin.posts.show', ['post' => $post->id]);
@@ -60,7 +59,9 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::findOrFail($id);
-        return view('admin.posts.show', compact('post'));
+        $category = $post->category;
+
+        return view('admin.posts.show', compact('post', 'category'));
     }
 
     /**
@@ -89,7 +90,7 @@ class PostController extends Controller
 
         $post = Post::findOrFail($id);
         $post->fill($data);
-        $post->slug = $this->getPostSlugFromTitle($post->title);
+        $post->slug = Post::getPostSlugFromTitle($post->title);
         $post->save();
 
         return redirect()->route('admin.posts.show', ['post'=> $post->id]);
@@ -108,22 +109,7 @@ class PostController extends Controller
 
         return redirect()->route('admin.posts.index');
     }
-    private function getPostSlugFromTitle ($title) {
-        //generiamo slug base
-        //finche slug è nel db 
-            // aggiungiamo un nmero progressivo
-            // se non esiste aggiungo slug nel model
-            $base_slug = str::slug($title, '-');
-            $slug = $base_slug;
-            $count = 1;
-            $post_found = Post::where('slug', '=', $slug)->first();
-            while ($post_found) {
-                $slug = $base_slug . '-' . $count;
-                $post_found = Post::where('slug', '=', $slug)->first();
-                $count++;
-            }
-            return $slug;
-    }
+   
     private function getValidationRules() {
         return [
             'title' => 'required|max:255',
