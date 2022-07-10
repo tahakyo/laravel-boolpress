@@ -12,6 +12,7 @@ class HomeController extends Controller
         $user = Auth::user();
         // $userInfo = $user->userInfo;
         // dd($userInfo);
+
         return view('admin.home', compact('user'));
     }
 }
