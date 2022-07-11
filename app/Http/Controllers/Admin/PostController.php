@@ -76,7 +76,9 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::findOrFail($id);
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::all();
+
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -116,7 +118,8 @@ class PostController extends Controller
     private function getValidationRules() {
         return [
             'title' => 'required|max:255',
-            'content' => 'required|max:25000'
+            'content' => 'required|max:25000',
+            'category_id' => 'exists:categories,id'
         ];
     }
 }
