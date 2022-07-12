@@ -12,6 +12,9 @@ export default {
   components: {
     Posts,
   },
+  mounted() {
+    // console.log("ciao"); 
+  },
 };
 </script>
 

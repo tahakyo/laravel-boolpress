@@ -1909,7 +1909,34 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Posts'
+  name: "Posts",
+  data: function data() {
+    return {
+      posts: []
+    };
+  },
+  mounted: function mounted() {
+    this.getPosts();
+  },
+  methods: {
+    getPosts: function getPosts() {
+      var _this = this;
+
+      axios.get("/api/posts").then(function (resp) {
+        _this.posts = resp.data.results;
+      });
+    },
+    troncateText: function troncateText(text, maxCharNumber) {
+      //se il testo è più lungo di maxCharNumber
+      //tronca il testo e aggiunge ...
+      //altrimenti ritorna il testo intero
+      if (text.length > maxCharNumber) {
+        return text.substr(0, maxCharNumber) + '...';
+      }
+
+      return text;
+    }
+  }
 });
 
 /***/ }),
@@ -1929,6 +1956,8 @@ __webpack_require__.r(__webpack_exports__);
   name: "App",
   components: {
     Posts: _components_posts_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  mounted: function mounted() {// console.log("ciao"); 
   }
 });
 
@@ -1949,17 +1978,27 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _vm._m(0);
+  return _c("div", {
+    staticClass: "container text-center mt-5"
+  }, [_c("h1", [_vm._v("Posts list")]), _vm._v(" "), _c("div", {
+    staticClass: "row row-cols-3"
+  }, _vm._l(_vm.posts, function (post) {
+    return _c("div", {
+      key: post.id,
+      staticClass: "col"
+    }, [_c("div", {
+      staticClass: "card mb-4"
+    }, [_c("div", {
+      staticClass: "card-body"
+    }, [_c("h5", {
+      staticClass: "card-title"
+    }, [_vm._v(_vm._s(post.title))]), _vm._v(" "), _c("p", {
+      staticClass: "card-text"
+    }, [_vm._v("\r\n              " + _vm._s(_vm.troncateText(post.content, 150)) + "\r\n            ")])])])]);
+  }), 0)]);
 };
 
-var staticRenderFns = [function () {
-  var _vm = this,
-      _c = _vm._self._c;
-
-  return _c("div", {
-    staticClass: "container"
-  }, [_c("h2", [_vm._v("Posts list")])]);
-}];
+var staticRenderFns = [];
 render._withStripped = true;
 
 
