@@ -1,8 +1,8 @@
 <template>
   <div class="container text-center mt-5">
     <h1>Posts list</h1>
+    <p>Total posts found: {{ totalPosts }}</p>
     <div class="row row-cols-3">
-
       <!-- single-post -->
       <div v-for="post in posts" :key="post.id" class="col">
         <div class="card mb-4">
@@ -25,6 +25,20 @@
         </div>
       </div>
     </div>
+    <nav aria-label="...">
+      <ul class="pagination">
+        <!-- previous page -->
+        <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <a @click="getPosts(currentPage - 1)" class="page-link">Previous</a>
+        </li>
+        <!-- page number -->
+        <li @click="getPosts(n)" v-for="n in lastPage" :key="n" class="page-item" :class="{ active: currentPage === n }"><a class="page-link" href="#">{{n}}</a></li>
+        <!-- next page -->
+        <li class="page-item" :class="{ disabled: currentPage === lastPage }">
+          <a @click="getPosts(currentPage + 1)" class="page-link" href="#">Next</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -35,26 +49,36 @@ export default {
   data() {
     return {
       posts: [],
+      currentPage: 1,
+      lastPage: 0,
+      total: 0
     };
   },
   mounted() {
-    this.getPosts();
+    this.getPosts(1);
   },
   methods: {
-    getPosts() {
-      axios.get("/api/posts").then((resp) => {
-        this.posts = resp.data.results;
+    getPosts(pageNumber) {
+      axios.get("/api/posts", {
+        params : {
+          page: pageNumber
+        }
+      }).then((resp) => {
+        this.posts = resp.data.results.data;
+        this.currentPage = resp.data.results.current_page;
+        this.lastPage = resp.data.results.last_page;
+        this.totalPosts = resp.data.results.total;
       });
     },
     troncateText(text, maxCharNumber) {
       //se il testo è più lungo di maxCharNumber
-        //tronca il testo e aggiunge ...
+      //tronca il testo e aggiunge ...
       //altrimenti ritorna il testo intero
       if (text.length > maxCharNumber) {
-        return text.substr(0, maxCharNumber) + '...';
+        return text.substr(0, maxCharNumber) + "...";
       }
       return text;
-    }
+    },
   },
 };
 </script>

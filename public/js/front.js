@@ -1912,18 +1912,28 @@ __webpack_require__.r(__webpack_exports__);
   name: "Posts",
   data: function data() {
     return {
-      posts: []
+      posts: [],
+      currentPage: 1,
+      lastPage: 0,
+      total: 0
     };
   },
   mounted: function mounted() {
-    this.getPosts();
+    this.getPosts(1);
   },
   methods: {
-    getPosts: function getPosts() {
+    getPosts: function getPosts(pageNumber) {
       var _this = this;
 
-      axios.get("/api/posts").then(function (resp) {
-        _this.posts = resp.data.results;
+      axios.get("/api/posts", {
+        params: {
+          page: pageNumber
+        }
+      }).then(function (resp) {
+        _this.posts = resp.data.results.data;
+        _this.currentPage = resp.data.results.current_page;
+        _this.lastPage = resp.data.results.last_page;
+        _this.totalPosts = resp.data.results.total;
       });
     },
     troncateText: function troncateText(text, maxCharNumber) {
@@ -1931,7 +1941,7 @@ __webpack_require__.r(__webpack_exports__);
       //tronca il testo e aggiunge ...
       //altrimenti ritorna il testo intero
       if (text.length > maxCharNumber) {
-        return text.substr(0, maxCharNumber) + '...';
+        return text.substr(0, maxCharNumber) + "...";
       }
 
       return text;
@@ -1980,7 +1990,7 @@ var render = function render() {
 
   return _c("div", {
     staticClass: "container text-center mt-5"
-  }, [_c("h1", [_vm._v("Posts list")]), _vm._v(" "), _c("div", {
+  }, [_c("h1", [_vm._v("Posts list")]), _vm._v(" "), _c("p", [_vm._v("Total posts found: " + _vm._s(_vm.totalPosts))]), _vm._v(" "), _c("div", {
     staticClass: "row row-cols-3"
   }, _vm._l(_vm.posts, function (post) {
     return _c("div", {
@@ -1995,7 +2005,58 @@ var render = function render() {
     }, [_vm._v(_vm._s(post.title))]), _vm._v(" "), _c("p", {
       staticClass: "card-text"
     }, [_vm._v("\r\n              " + _vm._s(_vm.troncateText(post.content, 150)) + "\r\n            ")])])])]);
-  }), 0)]);
+  }), 0), _vm._v(" "), _c("nav", {
+    attrs: {
+      "aria-label": "..."
+    }
+  }, [_c("ul", {
+    staticClass: "pagination"
+  }, [_c("li", {
+    staticClass: "page-item",
+    "class": {
+      disabled: _vm.currentPage === 1
+    }
+  }, [_c("a", {
+    staticClass: "page-link",
+    on: {
+      click: function click($event) {
+        return _vm.getPosts(_vm.currentPage - 1);
+      }
+    }
+  }, [_vm._v("Previous")])]), _vm._v(" "), _vm._l(_vm.lastPage, function (n) {
+    return _c("li", {
+      key: n,
+      staticClass: "page-item",
+      "class": {
+        active: _vm.currentPage === n
+      },
+      on: {
+        click: function click($event) {
+          return _vm.getPosts(n);
+        }
+      }
+    }, [_c("a", {
+      staticClass: "page-link",
+      attrs: {
+        href: "#"
+      }
+    }, [_vm._v(_vm._s(n))])]);
+  }), _vm._v(" "), _c("li", {
+    staticClass: "page-item",
+    "class": {
+      disabled: _vm.currentPage === _vm.lastPage
+    }
+  }, [_c("a", {
+    staticClass: "page-link",
+    attrs: {
+      href: "#"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.getPosts(_vm.currentPage + 1);
+      }
+    }
+  }, [_vm._v("Next")])])], 2)])]);
 };
 
 var staticRenderFns = [];
