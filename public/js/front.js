@@ -1936,15 +1936,15 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    troncateText: function troncateText(text, maxCharNumber) {
+    troncateText: function troncateText(maxCharNumber) {
       //se il testo è più lungo di maxCharNumber
       //tronca il testo e aggiunge ...
       //altrimenti ritorna il testo intero
-      if (text.length > maxCharNumber) {
-        return text.substr(0, maxCharNumber) + "...";
+      if (this.post.content.length > maxCharNumber) {
+        return this.post.content.substr(0, maxCharNumber) + "...";
       }
 
-      return text;
+      return this.post.content;
     }
   }
 });
@@ -2196,7 +2196,7 @@ var render = function render() {
     staticClass: "card-title"
   }, [_vm._v(_vm._s(_vm.post.title))]), _vm._v(" "), _c("p", {
     staticClass: "card-text"
-  }, [_vm._v("\r\n              " + _vm._s(_vm.troncateText(_vm.post.content, 150)) + "\r\n            ")])])]);
+  }, [_vm._v("\r\n              " + _vm._s(_vm.troncateText(150)) + "\r\n            ")])])]);
 };
 
 var staticRenderFns = [];

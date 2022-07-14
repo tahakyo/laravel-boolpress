@@ -5,7 +5,7 @@
             <p>Category: {{ categoryName }}</p>
             <h5 class="card-title">{{ post.title }}</h5>
             <p class="card-text">
-              {{ troncateText(post.content, 150) }}
+              {{ troncateText(150) }}
             </p>
           </div>
    </div>
@@ -25,14 +25,14 @@ export default {
     }
   },
   methods: {
-    troncateText(text, maxCharNumber) {
+    troncateText(maxCharNumber) {
       //se il testo è più lungo di maxCharNumber
       //tronca il testo e aggiunge ...
       //altrimenti ritorna il testo intero
-      if (text.length > maxCharNumber) {
-        return text.substr(0, maxCharNumber) + "...";
+      if (this.post.content.length > maxCharNumber) {
+        return this.post.content.substr(0, maxCharNumber) + "...";
       }
-      return text;
+      return this.post.content;
     },
   },
 };
