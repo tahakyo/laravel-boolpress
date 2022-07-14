@@ -1,20 +1,19 @@
 <template>
-  <div class="container text-center mt-5">
-    <Posts />
+  <div>
+    <Header />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Posts from "../components/posts.vue";
+
+import Header from '../components/Header.vue';
 
 export default {
   name: "App",
   components: {
-    Posts,
-  },
-  mounted() {
-    // console.log("ciao"); 
-  },
+    Header
+  }
 };
 </script>
 
