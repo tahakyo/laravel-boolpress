@@ -1,14 +1,19 @@
 <template>
-   <div class="card mb-4">
-          <!-- <img src="..." class="card-img-top" alt="..." /> -->
-          <div class="card-body">
-            <p>Category: {{ categoryName }}</p>
-            <h5 class="card-title">{{ post.title }}</h5>
-            <p class="card-text">
-              {{ troncateText(150) }}
-            </p>
-          </div>
-   </div>
+  <div class="card mb-4">
+    <!-- <img src="..." class="card-img-top" alt="..." /> -->
+    <div class="card-body">
+      <p>Category: {{ categoryName }}</p>
+      <h5 class="card-title">{{ post.title }}</h5>
+      <p class="card-text">
+        {{ troncateText(150) }}
+      </p>
+      <router-link
+        :to="{ name: 'single-post', params: { slug: post.slug } }"
+        class="card-link"
+        >Leggi post</router-link
+      >
+    </div>
+  </div>
 </template>
 
 <script>
@@ -20,9 +25,9 @@ export default {
   computed: {
     categoryName() {
       if (this.post.category != null) {
-                return this.post.category.name
-            }
-    }
+        return this.post.category.name;
+      }
+    },
   },
   methods: {
     troncateText(maxCharNumber) {
